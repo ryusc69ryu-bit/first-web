@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>그린피스 - 광주 근교 잔여 티 예약</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .nature-bg {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.35)), url('https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* 새가 날아다니는 애니메이션 */
+        @keyframes fly {
+            0% { transform: translate(-100px, 50px) scale(0.6); opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { transform: translate(calc(100vw + 100px), -150px) scale(1); opacity: 0; }
+        }
+
+        .bird {
+            position: absolute;
+            width: 30px;
+            height: 20px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ffffff'%3E%3Cpath d='M21 6.5c-2.5 0-4.7 1.2-6 3-1.3-1.8-3.5-3-6-3-3.9 0-7 3.1-7 7 0 1.2.3 2.4.9 3.4L3 18l3.1-1.3c1.2.7 2.6 1.1 4.1 1.1 3.9 0 7-3.1 7-7 0-.5-.1-1-.2-1.4 1.2-1.3 2.9-2.2 4.8-2.2v-0.7z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-size: contain;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .bird-1 { top: 15%; left: -10%; animation: fly 18s linear infinite; animation-delay: 0s; }
+        .bird-2 { top: 25%; left: -10%; animation: fly 14s linear infinite; animation-delay: 5s; transform: scale(0.8); }
+        .bird-3 { top: 10%; left: -10%; animation: fly 22s linear infinite; animation-delay: 10s; transform: scale(0.5); }
+
+        /* 물이 졸졸 흐르는 애니메이션 호수 스트립 */
+        @keyframes waterFlow {
+            0% { background-position: 0 0; }
+            100% { background-position: 100px 0; }
+        }
+
+        .flowing-water {
+            background: linear-gradient(90deg, rgba(56,189,248,0.2), rgba(14,165,233,0.4), rgba(56,189,248,0.2));
+            background-size: 100px 100px;
+            animation: waterFlow 4s linear infinite;
+        }
+    </style>
+</head>
+<body class="nature-bg min-h-screen text-gray-800 font-sans flex flex-col justify-between">
+
+    <!-- 날아다니는 새들 -->
+    <div class="bird bird-1"></div>
+    <div class="bird bird-2"></div>
+    <div class="bird bird-3"></div>
+
+    <!-- 상단 헤더 -->
+    <header class="bg-white/80 backdrop-blur-md shadow-md py-4 px-6 relative z-10">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-emerald-800 flex items-center gap-2">
+                ⛳ 그린피스 <span class="text-sm font-normal text-emerald-600">| 광주지역 잔여 티 예약</span>
+            </h1>
+            <div class="flex items-center gap-6">
+                <nav class="hidden md:flex gap-6 text-sm font-medium text-gray-700">
+                    <a href="#" class="hover:text-emerald-700 transition">홈</a>
+                    <a href="#" class="hover:text-emerald-700 transition">골프장 안내</a>
+                    <a href="#" class="hover:text-emerald-700 transition">예약 조회</a>
+                    <a href="#" class="hover:text-emerald-700 transition">AI 추천</a>
+                </nav>
+                <!-- 로그인 및 회원가입 버튼 추가 -->
+                <div class="flex items-center gap-2">
+                    <button onclick="openAuthModal('login')" class="text-xs md:text-sm font-semibold text-emerald-700 hover:text-emerald-900 bg-emerald-50 hover:bg-emerald-100 px-3.5 py-2 rounded-xl transition border border-emerald-200 shadow-sm">로그인</button>
+                    <button onclick="openAuthModal('signup')" class="text-xs md:text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 px-3.5 py-2 rounded-xl transition shadow-md">회원가입</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 메인 컨텐츠 영역 -->
+    <main class="max-w-6xl mx-auto px-4 py-10 w-full relative z-10">
+        
+        <!-- 상단 배너 -->
+        <div class="text-center text-white mb-8">
+            <span class="inline-block bg-emerald-600/80 text-emerald-100 text-xs px-3 py-1 rounded-full mb-3 backdrop-blur-sm animate-pulse">🌸 봄바람과 싱그러운 호수가 흐르는 필드</span>
+            <h2 class="text-3xl md:text-5xl font-extrabold mb-3 drop-shadow-lg">광주지역 골프장 실시간 예약</h2>
+            <p class="text-base md:text-lg drop-shadow text-emerald-50">새들이 노래하는 아름다운 필드의 잔여 티를 확인해보세요.</p>
+        </div>
+
+        <!-- 명성이 높고 아름다운 광주/전남 대표 골프장 3곳 갤러리 섹션 -->
+        <div class="mb-10">
+            <h3 class="text-white text-lg font-bold mb-4 flex items-center gap-2 drop-shadow">
+                ⭐ 광주지역 명예의 전당: 가장 아름다운 명문 골프장 TOP 3 (시그니처 홀)
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <!-- 골프장 1: 골드레이크 CC -->
+                <div class="bg-white/20 backdrop-blur-md border border-white/40 p-3 rounded-2xl shadow-xl flex flex-col gap-2 text-white transform hover:-translate-y-1 transition duration-300">
+                    <div class="relative w-full h-40 shrink-0 overflow-hidden rounded-xl shadow-inner border border-white/60">
+                        <img src="https://images.unsplash.com/photo-1535131749006-b7f58c99034b?auto=format&fit=crop&w=600&q=80" alt="골드레이크 CC 시그니처 호수 코스" class="w-full h-full object-cover">
+                        <span class="absolute top-2 left-2 bg-emerald-800/80 text-emerald-100 text-[11px] px-2.5 py-0.5 rounded-full font-semibold shadow">나주 · 골드레이크 CC</span>
+                    </div>
+                    <div class="px-1 pb-1">
+                        <h4 class="font-bold text-base">호수와 힐사이드의 명문 호수 코스</h4>
+                        <p class="text-xs text-emerald-50 mt-1">탁 트인 초대형 호수 뷰와 환상적인 아일랜드 그린 시그니처 홀</p>
+                    </div>
+                </div>
+
+                <!-- 골프장 2: 무등산 CC -->
+                <div class="bg-white/20 backdrop-blur-md border border-white/40 p-3 rounded-2xl shadow-xl flex flex-col gap-2 text-white transform hover:-translate-y-1 transition duration-300">
+                    <div class="relative w-full h-40 shrink-0 overflow-hidden rounded-xl shadow-inner border border-white/60">
+                        <img src="https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?auto=format&fit=crop&w=600&q=80" alt="무등산 CC 천혜의 자연 산악 코스" class="w-full h-full object-cover">
+                        <span class="absolute top-2 left-2 bg-emerald-800/80 text-emerald-100 text-[11px] px-2.5 py-0.5 rounded-full font-semibold shadow">화순 · 무등산 CC</span>
+                    </div>
+                    <div class="px-1 pb-1">
+                        <h4 class="font-bold text-base">천혜의 자연, 무등산 국립공원 뷰</h4>
+                        <p class="text-xs text-emerald-50 mt-1">웅장한 기암괴석과 계곡을 넘기는 스릴 넘치는 시그니처 홀</p>
+                    </div>
+                </div>
+
+                <!-- 골프장 3: 해피니스 CC -->
+                <div class="bg-white/20 backdrop-blur-md border border-white/40 p-3 rounded-2xl shadow-xl flex flex-col gap-2 text-white transform hover:-translate-y-1 transition duration-300">
+                    <div class="relative w-full h-40 shrink-0 overflow-hidden rounded-xl shadow-inner border border-white/60">
+                        <img src="https://images.unsplash.com/photo-1593111774616-2470f44bc14d?auto=format&fit=crop&w=600&q=80" alt="해피니스 CC 파노라마 코스" class="w-full h-full object-cover">
+                        <span class="absolute top-2 left-2 bg-emerald-800/80 text-emerald-100 text-[11px] px-2.5 py-0.5 rounded-full font-semibold shadow">나주 · 해피니스 CC</span>
+                    </div>
+                    <div class="px-1 pb-1">
+                        <h4 class="font-bold text-base">럭셔리 클럽하우스와 최고의 코스 컨디션</h4>
+                        <p class="text-xs text-emerald-50 mt-1">드넓은 페어웨이와 아름다운 조경이 어우러진 명품 파노라마 홀</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 물이 졸졸 흐르는 느낌을 주는 감성 배너 -->
+        <div class="flowing-water rounded-xl p-4 mb-8 text-center text-white shadow-inner border border-sky-300/30 backdrop-blur-sm flex items-center justify-center gap-3">
+            <span class="text-2xl animate-bounce">💧</span>
+            <span class="font-medium drop-shadow text-sky-900 bg-white/70 px-4 py-1 rounded-full text-sm">청정 호수 옆 코스에서 졸졸 흐르는 물소리와 함께 라운딩을 즐겨보세요!</span>
+            <span class="text-2xl animate-bounce">🌊</span>
+        </div>
+
+        <!-- 검색 및 필터 카드 -->
+        <div class="bg-white/90 backdrop-blur-md p-6 md:p-8 rounded-3xl shadow-2xl mb-8 grid grid-cols-1 md:grid-cols-3 gap-6 border border-white/50">
+            <!-- ① 골프장 선택 -->
+            <div>
+                <label class="block text-sm font-bold text-emerald-900 mb-2">⛳ 골프장 선택</label>
+                <select id="golfCourseSelect" class="w-full p-3.5 border border-emerald-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-white shadow-sm">
+                    <option value="all">전체보기 (광주지역 전체)</option>
+                    <option value="gwangsan">광산CC (광주 광산구)</option>
+                    <option value="bitgoeul">빛고을CC (광주 남구)</option>
+                    <option value="eodeungsan">어등산CC (광주 광산구)</option>
+                    <option value="naju">나주힐스 CC (나주)</option>
+                    <option value="goldlake">골드레이크 CC (나주)</option>
+                    <option value="happiness">해피니스 CC (나주)</option>
+                    <option value="mudeung산">무등산 CC (화순)</option>
+                    <option value="hwasun">화순 CC (화순)</option>
+                    <option value="muan">무안 CC (무안)</option>
+                    <option value="jseong">푸른솔장성 GC (장성)</option>
+                    <option value="gwangju_cc">광주 CC (곡성)</option>
+                    <option value="hampyeong">함평엘리체 CC (함평)</option>
+                </select>
+            </div>
+
+            <!-- ② 날짜 선택 -->
+            <div>
+                <label class="block text-sm font-bold text-emerald-900 mb-2">📅 날짜 선택</label>
+                <input type="date" id="dateSelect" class="w-full p-3.5 border border-emerald-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-white shadow-sm">
+            </div>
+
+            <!-- ③ 시간 선택 -->
+            <div>
+                <label class="block text-sm font-bold text-emerald-900 mb-2">⏰ 시간대 선택</label>
+                <select id="timeSelect" class="w-full p-3.5 border border-emerald-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-white shadow-sm">
+                    <option value="all">전체 시간</option>
+                    <option value="morning">오전 (06:00 ~ 11:59)</option>
+                    <option value="afternoon">오후 (12:00 ~ 18:00)</option>
+                </select>
+            </div>
+
+            <!-- 검색 버튼 -->
+            <div class="md:col-span-3 text-center mt-2">
+                <button onclick="searchTeeTimes()" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold px-10 py-4 rounded-xl shadow-xl transition transform hover:-translate-y-0.5 duration-200 w-full md:w-auto text-base flex items-center justify-center gap-2 mx-auto">
+                    <span>✨ 잔여 티 실시간 조회하기</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ⑥ 결과 출력 영역 (골프장별, 날짜별, 시간대별) -->
+        <div id="resultContainer" class="bg-white/95 backdrop-blur-md p-6 md:p-8 rounded-3xl shadow-2xl hidden border border-white/60">
+            <h3 class="text-xl font-bold text-emerald-900 mb-6 border-b border-emerald-100 pb-3 flex items-center gap-2">
+                📋 골프장별 잔여 티 검색 결과
+            </h3>
+            
+            <div class="space-y-6" id="teeListContent">
+                <!-- 동적으로 결과가 채워질 영역 -->
+            </div>
+        </div>
+    </main>
+
+    <!-- 예약 완료/확인 모달 -->
+    <div id="bookingModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 md:p-8 border border-emerald-100 transform transition-all">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3 text-3xl shadow-inner">
+                    ⛳
+                </div>
+                <h3 class="text-2xl font-bold text-emerald-950">티타임 예약 확인</h3>
+                <p class="text-xs text-gray-500 mt-1">선택하신 라운딩 정보를 확인하고 예약을 진행하세요.</p>
+            </div>
+            
+            <div class="bg-emerald-50/70 rounded-2xl p-4 mb-6 space-y-2.5 text-sm border border-emerald-100">
+                <div class="flex justify-between">
+                    <span class="text-gray-600 font-medium">골프장</span>
+                    <span id="modalCourseName" class="font-bold text-emerald-900">-</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600 font-medium">예약 날짜</span>
+                    <span id="modalDate" class="font-bold text-emerald-900">-</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600 font-medium">티타임 시간</span>
+                    <span id="modalTime" class="font-bold text-emerald-900">-</span>
+                </div>
+                <div class="flex justify-between border-t border-emerald-200/60 pt-2">
+                    <span class="text-gray-600 font-medium">그린피 예상금액</span>
+                    <span id="modalPrice" class="font-bold text-teal-700">-</span>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-xs font-bold text-emerald-900 mb-1">예약자 성함</label>
+                    <input type="text" id="bookerName" placeholder="홍길동" class="w-full p-3 border border-emerald-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-emerald-900 mb-1">연락처</label>
+                    <input type="text" id="bookerPhone" placeholder="010-0000-0000" class="w-full p-3 border border-emerald-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-white">
+                </div>
+            </div>
+
+            <div class="flex gap-3 mt-6">
+                <button onclick="closeModal()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3.5 rounded-xl transition text-sm">
+                    취소
+                </button>
+                <button onclick="confirmBooking()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg text-sm">
+                    예약 완료하기
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 로그인/회원가입 모달 추가 -->
+    <div id="authModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 md:p-8 border border-emerald-100 transform transition-all relative">
+            <button onclick="closeAuthModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 text-lg font-bold">✕</button>
+            
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3 text-3xl shadow-inner">
+                    🔐
+                </div>
+                <h3 id="authModalTitle" class="text-2xl font-bold text-emerald-950">로그인</h3>
+                <p id="authModalDesc" class="text-xs text-gray-500 mt-1">그린피스 계정으로 간편하게 로그인하세요.</p>
+            </div>
+
+            <div class="space-y-4">
+                <div id="signupNameField" class="hidden">
+                    <label class="block text-xs font-bold text-emerald-900 mb-1">이름</label>
+                    <input type="text" id="authName" placeholder="홍길동" class="w-full p-3 border border-emerald-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-emerald-900 mb-1">아이디 (이메일)</label>
+                    <input type="text" id="authEmail" placeholder="example@email.com" class="w-full p-3 border border-emerald-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-emerald-900 mb-1">비밀번호</label>
+                    <input type="password" id="authPassword" placeholder="••••••••" class="w-full p-3 border border-emerald-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-white">
+                </div>
+            </div>
+
+            <div class="mt-6 space-y-3">
+                <button onclick="submitAuth()" id="authSubmitBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg text-sm">
+                    로그인하기
+                </button>
+                <div class="text-center">
+                    <button onclick="toggleAuthMode()" id="authToggleText" class="text-xs text-emerald-700 hover:underline">
+                        아직 회원이 아니신가요? 회원가입
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 성공 알림 토스트 -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-emerald-900 text-white px-6 py-4 rounded-2xl shadow-2xl z-50 transform translate-y-28 transition duration-300 flex items-center gap-3 border border-emerald-700">
+        <span class="text-2xl">🎉</span>
+        <div>
+            <h4 id="toastTitle" class="font-bold text-sm">예약이 완료되었습니다!</h4>
+            <p id="toastDesc" class="text-xs text-emerald-200 mt-0.5">상세 예약 번호가 문자로 발송되었습니다.</p>
+        </div>
+    </div>
+
+    <!-- 푸터 -->
+    <footer class="bg-white/90 backdrop-blur-md text-center py-5 text-xs text-emerald-900/70 relative z-10 border-t border-emerald-100">
+        <p>&copy; 2026 그린피스. 광주지역 퍼블릭 및 정규홀 실시간 예약 서비스.</p>
+    </footer>
+
+    <!-- 자바스크립트 및 인터랙티브 기능 구조 -->
+    <script>
+        // 오늘 날짜 기본 세팅
+        document.getElementById('dateSelect').value = new Date().toISOString().substring(0, 10);
+
+        let selectedBookingData = {};
+        let isSignupMode = false;
+
+        function openAuthModal(mode) {
+            isSignupMode = (mode === 'signup');
+            updateAuthModalUI();
+            document.getElementById('authModal').classList.remove('hidden');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.add('hidden');
+        }
+
+        function toggleAuthMode() {
+            isSignupMode = !isSignupMode;
+            updateAuthModalUI();
+        }
+
+        function updateAuthModalUI() {
+            const title = document.getElementById('authModalTitle');
+            const desc = document.getElementById('authModalDesc');
+            const nameField = document.getElementById('signupNameField');
+            const submitBtn = document.getElementById('authSubmitBtn');
+            const toggleText = document.getElementById('authToggleText');
+
+            if (isSignupMode) {
+                title.innerText = "회원가입";
+                desc.innerText = "그린피스 회원이 되어 다양한 혜택을 누리세요.";
+                nameField.classList.remove('hidden');
+                submitBtn.innerText = "회원가입 완료";
+                toggleText.innerText = "이미 계정이 있으신가요? 로그인";
+            } else {
+                title.innerText = "로그인";
+                desc.innerText = "그린피스 계정으로 간편하게 로그인하세요.";
+                nameField.classList.add('hidden');
+                submitBtn.innerText = "로그인하기";
+                toggleText.innerText = "아직 회원이 아니신가요? 회원가입";
+            }
+        }
+
+        function submitAuth() {
+            const email = document.getElementById('authEmail').value.trim();
+            const password = document.getElementById('authPassword').value.trim();
+
+            if (!email || !password) {
+                showToastMessage("입력 오류", "아이디와 비밀번호를 모두 입력해주세요.");
+                return;
+            }
+
+            closeAuthModal();
+
+            const toastTitle = document.getElementById('toastTitle');
+            const toastDesc = document.getElementById('toastDesc');
+            if (isSignupMode) {
+                toastTitle.innerText = "회원가입이 완료되었습니다!";
+                toastDesc.innerText = "환영합니다! 이제 티타임 예약이 가능합니다.";
+            } else {
+                toastTitle.innerText = "성공적으로 로그인되었습니다!";
+                toastDesc.innerText = `${email}님 환영합니다.`;
+            }
+
+            const toast = document.getElementById('toast');
+            toast.classList.remove('translate-y-28');
+            setTimeout(() => {
+                toast.classList.add('translate-y-28');
+            }, 3500);
+        }
+
+        function searchTeeTimes() {
+            const course = document.getElementById('golfCourseSelect').value;
+            const date = document.getElementById('dateSelect').value;
+            const timeFilter = document.getElementById('timeSelect').value;
+
+            const resultContainer = document.getElementById('resultContainer');
+            const teeListContent = document.getElementById('teeListContent');
+            resultContainer.classList.remove('hidden');
+
+            // 누락된 골프장 데이터를 모두 포함한 확장 샘플 데이터
+            const mockData = [
+                {
+                    name: "광산CC", type: "퍼블릭", region: "광주 광산구",
+                    times: [
+                        { time: "06:40", price: "130,000원", status: "잔여 1팀" },
+                        { time: "07:20", price: "140,000원", status: "잔여 2팀" },
+                        { time: "13:10", price: "110,000원", status: "잔여 1팀" }
+                    ]
+                },
+                {
+                    name: "빛고을CC", type: "퍼블릭", region: "광주 남구",
+                    times: [
+                        { time: "06:30", price: "95,000원", status: "잔여 2팀" },
+                        { time: "11:20", price: "115,000원", status: "잔여 1팀" }
+                    ]
+                },
+                {
+                    name: "어등산CC", type: "퍼블릭", region: "광주 광산구",
+                    times: [
+                        { time: "07:10", price: "145,000원", status: "잔여 3팀" },
+                        { time: "14:00", price: "125,000원", status: "잔여 1팀" }
+                    ]
+                },
+                {
+                    name: "나주힐스 CC", type: "정규홀", region: "전남 나주",
+                    times: [
+                        { time: "08:00", price: "170,000원", status: "잔여 1팀" },
+                        { time: "12:30", price: "150,000원", status: "잔여 3팀" }
+                    ]
+                },
+                {
+                    name: "골드레이크 CC", type: "정규홀 (TOP 3 명문)", region: "전남 나주",
+                    times: [
+                        { time: "07:30", price: "180,000원", status: "잔여 2팀" },
+                        { time: "13:40", price: "160,000원", status: "잔여 2팀" }
+                    ]
+                },
+                {
+                    name: "해피니스 CC", type: "정규홀 (TOP 3 명문)", region: "전남 나주",
+                    times: [
+                        { time: "06:50", price: "175,000원", status: "잔여 1팀" },
+                        { time: "12:10", price: "155,000원", status: "잔여 4팀" }
+                    ]
+                },
+                {
+                    name: "무등산 CC", type: "정규홀 (TOP 3 명문)", region: "전남 화순",
+                    times: [
+                        { time: "08:20", price: "165,000원", status: "잔여 2팀" },
+                        { time: "14:30", price: "135,000원", status: "잔여 1팀" }
+                    ]
+                },
+                {
+                    name: "화순 CC", type: "정규홀", region: "전남 화순",
+                    times: [
+                        { time: "07:40", price: "160,000원", status: "잔여 3팀" },
+                        { time: "13:00", price: "140,000원", status: "잔여 2팀" }
+                    ]
+                },
+                {
+                    name: "무안CC", type: "퍼블릭/정규", region: "전남 무안",
+                    times: [
+                        { time: "07:00", price: "135,000원", status: "잔여 2팀" },
+                        { time: "14:20", price: "100,000원", status: "잔여 4팀" }
+                    ]
+                },
+                {
+                    name: "푸른솔장성 GC", type: "정규홀", region: "전남 장성",
+                    times: [
+                        { time: "08:10", price: "170,000원", status: "잔여 1팀" },
+                        { time: "13:50", price: "145,000원", status: "잔여 3팀" }
+                    ]
+                },
+                {
+                    name: "광주 CC", type: "정규홀", region: "전남 곡성",
+                    times: [
+                        { time: "06:40", price: "150,000원", status: "잔여 2팀" },
+                        { time: "12:00", price: "130,000원", status: "잔여 1팀" }
+                    ]
+                },
+                {
+                    name: "함평엘리체 CC", type: "정규홀", region: "전남 함평",
+                    times: [
+                        { time: "07:50", price: "155,000원", status: "잔여 2팀" },
+                        { time: "13:20", price: "125,000원", status: "잔여 3팀" }
+                    ]
+                }
+            ];
+
+            // 필터링 적용
+            let filtered = mockData;
+            if (course !== 'all') {
+                const courseMap = {
+                    'gwangsan': '광산CC',
+                    'bitgoeul': '빛고을CC',
+                    'eodeungsan': '어등산CC',
+                    'naju': '나주힐스 CC',
+                    'goldlake': '골드레이크 CC',
+                    'happiness': '해피니스 CC',
+                    'mudeung산': '무등산 CC',
+                    'hwasun': '화순 CC',
+                    'muan': '무안CC',
+                    'jseong': '푸른솔장성 GC',
+                    'gwangju_cc': '광주 CC',
+                    'hampyeong': '함평엘리체 CC'
+                };
+                const targetName = courseMap[course];
+                if (targetName) {
+                    filtered = mockData.filter(item => item.name === targetName);
+                }
+            }
+
+            // HTML 생성
+            let html = '';
+            filtered.forEach(golf => {
+                // 시간대 필터 적용
+                const validTimes = golf.times.filter(t => {
+                    const hour = parseInt(t.time.split(':')[0], 10);
+                    if (timeFilter === 'morning') return hour < 12;
+                    if (timeFilter === 'afternoon') return hour >= 12;
+                    return true;
+                });
+
+                if (validTimes.length === 0) return;
+
+                html += `
+                    <div class="border border-emerald-100 rounded-2xl p-5 bg-gradient-to-br from-emerald-50/60 to-teal-50/30 shadow-sm hover:shadow-md transition">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
+                            <div class="flex items-center gap-3 flex-wrap">
+                                <h4 class="text-xl font-bold text-emerald-950">${golf.name}</h4>
+                                <span class="text-xs bg-emerald-200/80 text-emerald-900 font-semibold px-2.5 py-1 rounded-full">${golf.type}</span>
+                                <span class="text-xs text-emerald-700 bg-white/80 px-2 py-0.5 rounded border border-emerald-100">${golf.region}</span>
+                            </div>
+                            <span class="text-sm font-medium text-emerald-700 bg-white/80 px-3 py-1 rounded-lg border border-emerald-100">📅 선택일: ${date}</span>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                `;
+                
+                validTimes.forEach(t => {
+                    html += `
+                        <button onclick="openBookingModal('${golf.name}', '${date}', '${t.time}', '${t.price}')" class="bg-white hover:bg-emerald-600 hover:text-white text-emerald-900 border border-emerald-200 p-3 rounded-xl shadow-sm transition text-center group">
+                            <span class="block font-bold text-base group-hover:text-white">${t.time}</span>
+                            <span class="block text-xs text-gray-500 group-hover:text-emerald-100 mt-0.5">${t.price}</span>
+                            <span class="inline-block mt-1 text-[10px] bg-emerald-100 text-emerald-800 group-hover:bg-emerald-700 group-hover:text-white px-1.5 py-0.5 rounded">${t.status}</span>
+                        </button>
+                    `;
+                });
+
+                html += `</div></div>`;
+            });
+
+            if (!html) {
+                html = `<div class="text-center py-8 text-gray-500">선택하신 조건에 일치하는 잔여 티타임이 없습니다. 다른 시간대나 골프장을 선택해주세요.</div>`;
+            }
+
+            teeListContent.innerHTML = html;
+        }
+
+        function openBookingModal(name, date, time, price) {
+            selectedBookingData = { name, date, time, price };
+            document.getElementById('modalCourseName').innerText = name;
+            document.getElementById('modalDate').innerText = date;
+            document.getElementById('modalTime').innerText = time;
+            document.getElementById('modalPrice').innerText = price;
+            
+            document.getElementById('bookingModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('bookingModal').classList.add('hidden');
+        }
+
+        function confirmBooking() {
+            const nameInput = document.getElementById('bookerName').value.trim();
+            const phoneInput = document.getElementById('bookerPhone').value.trim();
+
+            if (!nameInput || !phoneInput) {
+                showToastMessage("입력 누락", "예약자 성함과 연락처를 모두 입력해주세요.");
+                return;
+            }
+
+            closeModal();
+            
+            const toastTitle = document.getElementById('toastTitle');
+            const toastDesc = document.getElementById('toastDesc');
+            toastTitle.innerText = "예약이 완료되었습니다!";
+            toastDesc.innerText = `${selectedBookingData.name} (${selectedBookingData.date} ${selectedBookingData.time}) 예약 완료`;
+
+            const toast = document.getElementById('toast');
+            toast.classList.remove('translate-y-28');
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-28');
+            }, 3500);
+        }
+
+        function showToastMessage(title, desc) {
+            const toastTitle = document.getElementById('toastTitle');
+            const toastDesc = document.getElementById('toastDesc');
+            toastTitle.innerText = title;
+            toastDesc.innerText = desc;
+
+            const toast = document.getElementById('toast');
+            toast.classList.remove('translate-y-28');
+            setTimeout(() => {
+                toast.classList.add('translate-y-28');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
